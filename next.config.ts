@@ -7,6 +7,9 @@ const nextConfig: NextConfig = {
   turbopack: {
     root: path.join(__dirname),
   },
+  // Mounted under the unified portfolio domain at this sub-path (multi-zones).
+  // Keep in sync with BASE_PATH in src/lib/base.ts.
+  basePath: "/live/agenteval",
 };
 
 export default nextConfig;

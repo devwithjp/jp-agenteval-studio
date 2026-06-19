@@ -3,6 +3,7 @@
 import { useState } from "react";
 import type { CaseResult, Run, Suite } from "@/lib/types";
 import { track } from "@/lib/analytics";
+import { apiPath } from "@/lib/base";
 
 function Score({ label, value }: { label: string; value: number }) {
   const pct = (value / 5) * 100;
@@ -184,7 +185,7 @@ export function RunView({ suite }: { suite: Suite }) {
     setFbSent(false);
     track("demo_started", { suiteId: suite.id });
     try {
-      const res = await fetch("/api/run", {
+      const res = await fetch(apiPath("/api/run"), {
         method: "POST",
         headers: { "content-type": "application/json" },
         body: JSON.stringify({ suite, mode: "mock" }),
@@ -205,7 +206,7 @@ export function RunView({ suite }: { suite: Suite }) {
 
   async function sendFeedback() {
     if (!run || fbRating < 1) return;
-    await fetch("/api/feedback", {
+    await fetch(apiPath("/api/feedback"), {
       method: "POST",
       headers: { "content-type": "application/json" },
       body: JSON.stringify({ runId: run.id, rating: fbRating, notes: fbNotes }),
