@@ -1,19 +1,12 @@
 "use client";
 
-import { useState } from "react";
-
 // Toggles the `light` class on <html>. Default (no class) is the dark brand theme.
-// Initial state is read lazily from the DOM (the pre-hydration script in layout.tsx
-// already applied the saved theme); the icon span suppresses hydration warnings since
-// its value depends on client-only state.
+// Renders BOTH glyphs and lets CSS show the right one based on the html.light class
+// (set pre-hydration by the inline script in layout). This keeps server and client
+// initial render identical — no hydration mismatch, no setState-in-effect.
 export function ThemeToggle() {
-  const [light, setLight] = useState(
-    () => typeof document !== "undefined" && document.documentElement.classList.contains("light")
-  );
-
   function toggle() {
-    const next = !light;
-    setLight(next);
+    const next = !document.documentElement.classList.contains("light");
     document.documentElement.classList.toggle("light", next);
     try {
       localStorage.setItem("theme", next ? "light" : "dark");
@@ -26,9 +19,8 @@ export function ThemeToggle() {
       aria-label="Toggle color theme"
       className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-line text-muted transition-colors hover:bg-elevated hover:text-fg"
     >
-      <span aria-hidden suppressHydrationWarning className="text-sm">
-        {light ? "☾" : "☀"}
-      </span>
+      <span aria-hidden className="theme-icon-dark text-sm">☀</span>
+      <span aria-hidden className="theme-icon-light text-sm">☾</span>
     </button>
   );
 }

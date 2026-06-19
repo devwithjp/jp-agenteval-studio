@@ -80,4 +80,10 @@ body {
   color: var(--accent-fg);
 }
 
+/* Theme-toggle icons: render both, show one by theme class. CSS-driven so SSR and
+   client initial render match (no hydration mismatch). */
+.theme-icon-light { display: none; }
+html.light .theme-icon-dark { display: none; }
+html.light .theme-icon-light { display: inline; }
+
 a { color: inherit; }
