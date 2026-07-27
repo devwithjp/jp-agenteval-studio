@@ -7,53 +7,60 @@ export const sampleSuites: Suite[] = [
   {
     id: "support-replies",
     name: "Support reply quality",
-    description: "Are auto-drafted support replies accurate, on-policy, and grounded in the ticket?",
-    task: "Draft a concise, friendly support reply that resolves the customer's issue using only the facts in the ticket.",
+    description:
+      "Release gate for Meridian Air's support copilot: before agents can send AI-drafted replies to passengers, drafts must be accurate, grounded in the ticket, and inside refund/compensation policy.",
+    task: "Draft a concise, friendly reply to an airline customer-support ticket. Use only facts stated in the ticket, name a concrete next step, and never promise refunds or compensation outside published policy.",
     threshold: 4.0,
     variants: [
       {
         id: "v1-baseline",
         name: "v1 · baseline",
         model: "claude-opus-4-8",
-        systemPrompt: "You are a support agent. Reply to the customer.",
-        description: "Minimal prompt — the control.",
+        systemPrompt: "You are a customer support agent for an airline. Reply to the passenger's ticket.",
+        description: "Minimal prompt — the control we shipped the pilot with.",
       },
       {
         id: "v2-grounded",
         name: "v2 · grounded + policy",
         model: "claude-opus-4-8",
         systemPrompt:
-          "You are a senior support agent. Resolve the issue using ONLY facts in the ticket. Be concise and friendly. Never promise refunds outside policy. If information is missing, ask one clarifying question.",
-        description: "Adds grounding, policy guardrails, and a clarifying-question fallback.",
+          "You are a senior support agent for Meridian Air. Resolve the passenger's issue using ONLY facts stated in the ticket. Be concise and warm; always name the next step and its timeframe. Never promise refunds, vouchers, or compensation beyond published policy. If a required detail (booking ref, flight number, bag tag) is missing, ask exactly one clarifying question instead of guessing.",
+        description: "Adds grounding, refund/compensation guardrails, and a clarifying-question fallback.",
       },
     ],
     cases: [
       {
         id: "c1",
-        input: "My order #4821 hasn't arrived and the tracking hasn't moved in 5 days.",
-        expected: "I'm sorry order #4821 is delayed — I've escalated it to the carrier and will follow up within 24 hours.",
+        input:
+          "My checked bag never showed up after flight MA452 SYD–MEL last night. Bag tag MA-118276. I need it before a work event tomorrow.",
+        expected:
+          "I'm sorry your bag from MA452 is delayed. I've filed a trace on tag MA-118276 and you'll get a status update within 24 hours; delivery to your address is free once located.",
         checks: [
-          { type: "includes", value: "4821", label: "references order number" },
+          { type: "includes", value: "MA-118276", label: "references bag tag" },
           { type: "excludes", value: "refund", label: "no unprompted refund offer" },
           { type: "max_length", value: 600 },
         ],
       },
       {
         id: "c2",
-        input: "How do I reset my password? I didn't get the email.",
-        expected: "Check your spam folder, then use the 'Resend reset email' link on the login page; the email can take up to 10 minutes.",
+        input:
+          "Online check-in keeps rejecting my booking reference TKWQ9L — it says 'booking not found' but my card was charged.",
+        expected:
+          "Sorry about that — please try retrieving the booking with reference TKWQ9L and the passenger's last name exactly as it appears on the ticket; if it still fails, the airport kiosk can check you in with no fee.",
         checks: [
-          { type: "includes", value: "reset", label: "mentions reset flow" },
+          { type: "includes", value: "TKWQ9L", label: "references booking ref" },
           { type: "max_length", value: 600 },
         ],
       },
       {
         id: "c3",
-        input: "Your product broke after one day. This is unacceptable.",
-        expected: "I'm sorry to hear that — let's get this fixed. Can you tell me what happened so I can arrange a replacement or repair?",
+        input:
+          "You cancelled my Saturday flight to Auckland with four hours' notice and auto-rebooked me two days later. Two days. This is unacceptable.",
+        expected:
+          "I'm really sorry about the cancellation — that's a rough change. Let me look at earlier options now: I can rebook you on tomorrow morning's departure or via Wellington tonight. Which works better?",
         checks: [
-          { type: "excludes", value: "refund", label: "no unprompted refund offer" },
-          { type: "includes", value: "replacement", label: "offers a path forward" },
+          { type: "excludes", value: "compensation", label: "no unprompted compensation promise" },
+          { type: "includes", value: "rebook", label: "offers a rebooking path" },
         ],
       },
     ],

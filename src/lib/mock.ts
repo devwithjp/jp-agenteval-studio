@@ -39,7 +39,8 @@ export function mockGenerate(tc: TestCase, variant: Variant, variantIndex: numbe
     // Weaker variant: partial / hedged answer that may miss a required term.
     return `Based on the input, a reasonable response is: ${tc.expected.split(" ").slice(0, Math.ceil(tc.expected.split(" ").length * 0.6)).join(" ")}…`;
   }
-  return `Mock response for "${tc.input.slice(0, 60)}" from ${variant.name}.`;
+  // No reference answer on this case: return a plausible generic draft.
+  return `Thanks for reaching out about "${tc.input.slice(0, 60).trim()}". Here's what I can confirm from the details you've given, and the next step I'd suggest to resolve it.`;
 }
 
 export function mockJudge(

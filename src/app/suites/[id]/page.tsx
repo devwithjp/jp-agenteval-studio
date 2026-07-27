@@ -28,14 +28,14 @@ export default async function SuitePage({ params }: { params: Promise<{ id: stri
     <>
       <div className="border-b border-line">
         <Container className="py-12">
-          <Link href="/" className="text-sm text-muted hover:text-fg">
+          <Link href="/" prefetch={false} className="text-sm text-muted hover:text-fg">
             ← Dashboard
           </Link>
           <div className="mt-4 flex items-center gap-3">
             <Eyebrow>Eval suite</Eyebrow>
             <span className="font-mono text-xs text-muted">release gate ≥ {suite.threshold.toFixed(1)}</span>
           </div>
-          <h1 className="mt-3 text-3xl font-semibold tracking-tight sm:text-4xl">{suite.name}</h1>
+          <h1 className="mt-3 font-display text-3xl font-semibold tracking-tight sm:text-4xl">{suite.name}</h1>
           <p className="mt-3 max-w-2xl leading-relaxed text-muted">{suite.description}</p>
           <p className="mt-2 max-w-2xl text-sm text-muted">
             <span className="text-fg">Task:</span> {suite.task}
@@ -44,7 +44,7 @@ export default async function SuitePage({ params }: { params: Promise<{ id: stri
       </div>
 
       <Section>
-        <div className="grid gap-8 lg:grid-cols-[minmax(0,300px)_1fr]">
+        <div className="grid gap-8 lg:grid-cols-[300px_minmax(0,1fr)]">
           <aside>
             <h2 className="text-sm font-medium text-muted">Variants under test</h2>
             <div className="mt-3 space-y-3">

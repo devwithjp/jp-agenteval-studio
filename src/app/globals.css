@@ -8,30 +8,37 @@
 */
 
 :root {
-  /* dark (default) */
-  --bg: #0b0c0e;
-  --surface: #16181c;
-  --elevated: #1f2228;
-  --line: #2a2e35;
-  --fg: #e7e7e4;
-  --muted: #9a9a93;
-  --accent: #c6f24e;        /* acid-lime "signal" — fills carry dark text */
-  --accent-fg: #0b0c0e;
-  --link: #cdf25e;          /* accent as readable text on dark */
+  /* dark, deep ocean (default) */
+  --bg: #07161c;
+  --surface: #0d2430;
+  --elevated: #14313c;
+  --line: #21404c;
+  --fg: #eaf4f5;
+  --muted: #92aeb6;
+  --accent: #45e6cb;        /* aqua, fills carry deep-ink text */
+  --accent-2: #38bdf2;      /* secondary current, for gradients */
+  --accent-fg: #04161c;
+  --link: #6fefd8;
+  --glass: rgb(13 36 48 / 0.55);
   --shadow: 0 1px 2px rgb(0 0 0 / 0.4), 0 8px 24px rgb(0 0 0 / 0.25);
+  --glow: 0 0 0 1px color-mix(in oklab, var(--accent) 30%, transparent), 0 18px 50px -18px color-mix(in oklab, var(--accent) 45%, transparent);
 }
 
 html.light {
-  --bg: #fafaf7;
+  /* light, foam */
+  --bg: #eef6f7;
   --surface: #ffffff;
-  --elevated: #f2f2ee;
-  --line: #e4e4dd;
-  --fg: #16181c;
-  --muted: #5c5c55;
-  --accent: #c6f24e;
-  --accent-fg: #16181c;
-  --link: #4a6b00;          /* deeper lime for contrast on light */
-  --shadow: 0 1px 2px rgb(0 0 0 / 0.06), 0 8px 24px rgb(0 0 0 / 0.08);
+  --elevated: #e6f0f1;
+  --line: #d3e2e4;
+  --fg: #082530;
+  --muted: #4d6e78;
+  --accent: #0c8c8c;        /* deeper teal, fills carry foam text */
+  --accent-2: #1c7fb8;
+  --accent-fg: #ffffff;
+  --link: #0a7676;
+  --glass: rgb(255 255 255 / 0.6);
+  --shadow: 0 1px 2px rgb(8 37 48 / 0.06), 0 8px 24px rgb(8 37 48 / 0.18);
+  --glow: 0 0 0 1px color-mix(in oklab, var(--accent) 28%, transparent), 0 18px 50px -18px color-mix(in oklab, var(--accent) 30%, transparent);
 }
 
 @theme inline {
@@ -42,10 +49,12 @@ html.light {
   --color-fg: var(--fg);
   --color-muted: var(--muted);
   --color-accent: var(--accent);
+  --color-accent-2: var(--accent-2);
   --color-accent-fg: var(--accent-fg);
   --color-link: var(--link);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+  --font-display: var(--font-fraunces);
 }
 
 html {
@@ -87,3 +96,26 @@ html.light .theme-icon-dark { display: none; }
 html.light .theme-icon-light { display: inline; }
 
 a { color: inherit; }
+
+/* Release-gate verdict treatments (run results hero).
+   SHIP glows in the accent; HOLD warms the surface toward amber/red via color-mix —
+   no new palette hexes, so both derive correctly from each theme's tokens. */
+.gate-ship {
+  border-color: color-mix(in oklab, var(--accent) 55%, var(--line));
+  background:
+    radial-gradient(120% 160% at 0% 0%, color-mix(in oklab, var(--accent) 12%, transparent), transparent 60%)
+    var(--surface);
+  box-shadow: var(--glow);
+}
+.gate-hold {
+  --hold: color-mix(in oklab, orange 60%, red);
+  border-color: color-mix(in oklab, var(--hold) 45%, var(--line));
+  background:
+    radial-gradient(120% 160% at 0% 0%, color-mix(in oklab, var(--hold) 10%, transparent), transparent 60%)
+    var(--surface);
+}
+.gate-hold-badge {
+  border: 1px solid color-mix(in oklab, var(--hold) 55%, var(--line));
+  background: color-mix(in oklab, var(--hold) 16%, var(--surface));
+  color: var(--fg);
+}

@@ -12,7 +12,7 @@ export default function Dashboard() {
         <Container className="py-20 sm:py-28">
           <div className="max-w-3xl">
             <Eyebrow>Evaluation · LLMOps</Eyebrow>
-            <h1 className="mt-4 text-4xl font-semibold leading-[1.1] tracking-tight sm:text-5xl">
+            <h1 className="mt-4 font-display text-4xl font-semibold leading-[1.1] tracking-tight sm:text-5xl">
               {app.tagline}
             </h1>
             <p className="mt-5 max-w-2xl text-lg leading-relaxed text-muted">{app.description}</p>
@@ -39,6 +39,7 @@ export default function Dashboard() {
             <Link
               key={s.id}
               href={`/suites/${s.id}`}
+              prefetch={false}
               className="group rounded-xl border border-line bg-surface p-6 transition-colors hover:border-accent/50"
             >
               <div className="flex items-center justify-between gap-3">

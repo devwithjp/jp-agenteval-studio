@@ -91,7 +91,7 @@ export default function NewSuitePage() {
         <button onClick={() => setBuilt(null)} className="text-sm text-muted hover:text-fg">
           ← Edit suite
         </button>
-        <h1 className="mt-4 text-2xl font-semibold tracking-tight">{built.name}</h1>
+        <h1 className="mt-4 font-display text-2xl font-semibold tracking-tight">{built.name}</h1>
         <p className="mt-2 text-muted">{built.description}</p>
         <div className="mt-8">
           <RunView suite={built} />
@@ -104,12 +104,12 @@ export default function NewSuitePage() {
     <>
       <div className="border-b border-line">
         <Container className="py-10">
-          <Link href="/" className="text-sm text-muted hover:text-fg">
+          <Link href="/" prefetch={false} className="text-sm text-muted hover:text-fg">
             ← Dashboard
           </Link>
           <div className="mt-4">
             <Eyebrow>Create</Eyebrow>
-            <h1 className="mt-2 text-3xl font-semibold tracking-tight">Build an eval suite</h1>
+            <h1 className="mt-2 font-display text-3xl font-semibold tracking-tight">Build an eval suite</h1>
             <p className="mt-2 max-w-2xl text-muted">
               Define the task, two variants, and a few test cases with deterministic checks, then run
               it in mock mode.

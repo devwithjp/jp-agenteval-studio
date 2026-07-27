@@ -39,7 +39,7 @@ export function SectionHeader({
   return (
     <div className="max-w-2xl">
       {eyebrow ? <Eyebrow>{eyebrow}</Eyebrow> : null}
-      <h2 className="mt-3 text-3xl font-semibold tracking-tight sm:text-4xl">{title}</h2>
+      <h2 className="mt-3 font-display text-3xl font-semibold tracking-tight sm:text-4xl">{title}</h2>
       {intro ? <p className="mt-4 text-lg leading-relaxed text-muted">{intro}</p> : null}
     </div>
   );
@@ -110,7 +110,7 @@ export function CTA({ href, children, variant = "primary", external, className =
     );
   }
   return (
-    <Link href={href} className={cls}>
+    <Link href={href} prefetch={false} className={cls}>
       {children}
     </Link>
   );

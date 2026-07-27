@@ -13,7 +13,7 @@ export function AppNav({ liveAvailable }: { liveAvailable: boolean }) {
     <header className="sticky top-0 z-50 border-b border-line bg-bg/80 backdrop-blur">
       <nav className="mx-auto flex w-full max-w-6xl items-center justify-between px-5 py-3 sm:px-8">
         <div className="flex items-center gap-3">
-          <Link href="/" className="flex items-center gap-2 font-semibold tracking-tight">
+          <Link href="/" prefetch={false} className="flex items-center gap-2 font-semibold tracking-tight">
             <span className="inline-flex h-7 w-7 items-center justify-center rounded-md bg-accent font-mono text-xs text-accent-fg">
               AE
             </span>
@@ -30,6 +30,7 @@ export function AppNav({ liveAvailable }: { liveAvailable: boolean }) {
             <Link
               key={item.href}
               href={item.href}
+              prefetch={false}
               className={`hidden rounded-full px-3 py-1.5 text-sm transition-colors sm:block ${
                 isActive(item.href) ? "bg-elevated text-fg" : "text-muted hover:text-fg"
               }`}

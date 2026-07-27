@@ -24,28 +24,58 @@ function Score({ label, value }: { label: string; value: number }) {
   );
 }
 
+// The release-gate verdict is the headline of a run — everything else is evidence.
 function GateBanner({ run }: { run: Run }) {
   const ok = run.gate.passed;
   return (
-    <div
-      className={`rounded-xl border p-5 ${
-        ok ? "border-accent/50 bg-accent/5" : "border-line bg-surface"
-      }`}
-    >
-      <div className="flex items-center gap-2">
+    <div className={`rounded-2xl border p-6 sm:p-7 ${ok ? "gate-ship" : "gate-hold"}`}>
+      <div className="flex flex-wrap items-center gap-3">
         <span
-          className={`inline-flex h-6 items-center rounded-full px-2.5 font-mono text-xs ${
-            ok ? "bg-accent text-accent-fg" : "border border-line text-muted"
+          className={`inline-flex h-7 items-center rounded-full px-3 font-mono text-xs font-semibold tracking-wide ${
+            ok ? "bg-accent text-accent-fg" : "gate-hold-badge"
           }`}
         >
-          {ok ? "RELEASE: PASS" : "RELEASE: HOLD"}
+          {ok ? "RELEASE: SHIP" : "RELEASE: HOLD"}
         </span>
         <span className="font-mono text-xs text-muted">
           gate ≥ {run.gate.threshold.toFixed(1)} · best {run.gate.bestAvgQuality.toFixed(1)}
         </span>
       </div>
-      <p className="mt-3 leading-relaxed">{run.gate.recommendation}</p>
+      <p className="mt-4 max-w-2xl text-lg leading-relaxed">{run.gate.recommendation}</p>
     </div>
+  );
+}
+
+// PM view: the exact prompt change under test, side by side.
+function PromptDiff({ suite }: { suite: Suite }) {
+  return (
+    <details className="group mt-4 rounded-xl border border-line bg-surface">
+      <summary className="flex cursor-pointer list-none items-center justify-between gap-3 px-5 py-4 [&::-webkit-details-marker]:hidden">
+        <span className="text-sm font-medium">Prompt diff — what changed between variants</span>
+        <span className="font-mono text-xs text-muted">
+          <span className="group-open:hidden">+ show</span>
+          <span className="hidden group-open:inline">− hide</span>
+        </span>
+      </summary>
+      <div className="grid gap-4 border-t border-line p-5 md:grid-cols-2">
+        {suite.variants.map((v, i) => (
+          <div key={v.id}>
+            <div className="flex items-center justify-between gap-2">
+              <span className="text-sm font-medium">{v.name}</span>
+              <span className="font-mono text-[10px] uppercase tracking-wide text-muted">system prompt</span>
+            </div>
+            <pre
+              className={`mt-2 whitespace-pre-wrap rounded-lg border p-3 font-mono text-xs leading-relaxed text-fg ${
+                i > 0 ? "border-accent/40 bg-accent/5" : "border-line bg-bg"
+              }`}
+            >
+              {v.systemPrompt}
+            </pre>
+            {v.description ? <p className="mt-2 text-xs leading-relaxed text-muted">{v.description}</p> : null}
+          </div>
+        ))}
+      </div>
+    </details>
   );
 }
 
@@ -265,6 +295,7 @@ export function RunView({ suite }: { suite: Suite }) {
                 <VariantCard key={v.id} run={run} variantId={v.id} />
               ))}
             </div>
+            <PromptDiff suite={suite} />
           </div>
 
           <div>
