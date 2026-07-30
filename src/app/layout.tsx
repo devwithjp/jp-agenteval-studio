@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Geist, Geist_Mono, Fraunces } from "next/font/google";
+import { Geist, Geist_Mono, Bricolage_Grotesque } from "next/font/google";
 import "./globals.css";
 import { app } from "@/lib/site";
 import { AppNav } from "@/components/app-nav";
@@ -7,14 +7,14 @@ import { liveModeAvailable } from "@/lib/anthropic";
 
 const geistSans = Geist({ variable: "--font-geist-sans", subsets: ["latin"] });
 const geistMono = Geist_Mono({ variable: "--font-geist-mono", subsets: ["latin"] });
-const fraunces = Fraunces({
-  variable: "--font-fraunces",
+const display = Bricolage_Grotesque({
+  variable: "--font-bricolage",
   subsets: ["latin"],
-  axes: ["SOFT", "WONK", "opsz"],
+  weight: ["400", "500", "600", "700"],
 });
 
 export const metadata: Metadata = {
-  title: { default: `${app.name} — ${app.tagline}`, template: `%s — ${app.name}` },
+  title: { default: `${app.name}, ${app.tagline}`, template: `%s · ${app.name}` },
   description: app.description,
 };
 
@@ -27,7 +27,7 @@ const themeScript = `(function(){try{var t=localStorage.getItem('theme');if(t===
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   const liveAvailable = liveModeAvailable();
   return (
-    <html lang="en" className={`${geistSans.variable} ${geistMono.variable} ${fraunces.variable} h-full antialiased`}>
+    <html lang="en" className={`${geistSans.variable} ${geistMono.variable} ${display.variable} h-full antialiased`}>
       <head>
         <script dangerouslySetInnerHTML={{ __html: themeScript }} />
       </head>
